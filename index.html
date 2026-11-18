@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>쨔뿌러지는일과</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<main>
+ <header class="full">
+  <div class="tabs"><div class="logo">🗓️<small>쨔뿌러지는<br>일과</small></div><button id="vd">일간</button><button id="vw">주간</button><button id="vm">월간</button><button id="vy">가계부</button><button id="vs" class="vs">⚙ 설정</button></div>
+  <div class="nav"><button id="prev">◀</button><h1 id="title"></h1><button id="next">▶</button><button id="today">오늘</button></div>
+  <div class="tagbar" id="tagbar"></div>
+ </header>
+ <div class="full blkbar" id="blkbar" hidden></div>
+ <div class="zone" id="zT"></div><div class="zone" id="zL"></div><div class="zone" id="zR"></div>
+
+ <section class="card" id="dayL">
+  <button class="addbtn" id="addTask">+ 할 일 추가</button>
+  <div class="row" style="margin-top:14px"><span class="sub" style="flex:1">⠿ 끌어서 순서 변경 · 다른 분류 위로 놓으면 분류 이동</span><button class="sm" id="sortT">시간순 정렬</button></div>
+  <div id="list"></div>
+ </section>
+ <section class="card" id="dayG">
+  <div class="grid" id="grid"></div>
+  <p class="sub" style="margin:10px 0 0">시간을 지정한 할 일은 완료 체크하면 칠해지고, "체크 안 해도 칠하기"를 켠 일정은 항상 칠해져요. 시간표를 끌어서(또는 시작 칸·끝 칸을 차례로 눌러) 시간을 고르면 그 시간으로 할 일을 추가할 수 있어요. 하루는 7시에 시작해 다음 날 6시 59분에 끝나요. 굵은 시간(0~6시)은 다음 날 새벽이에요.</p>
+  
+ </section>
+ <section class="card" id="wkP"></section>
+ <section class="card" id="wkL"><div id="wkCL"></div></section>
+ <section class="card" id="wkG"><div class="wk" id="wk"></div></section>
+ <section class="card" id="wkS"><b>주간 시간 배분</b><div class="stats" id="stW"></div></section>
+ <section class="card" id="moP"></section>
+ <section class="card" id="moL"><div id="moCL"></div></section>
+ <section class="card" id="moG"><div class="mo" id="mo"></div></section>
+ <section class="card" id="moS"><b>월간 시간 배분</b><div class="stats" id="stM"></div></section>
+<section class="card" id="dayS"><b>시간 배분</b><div class="stats" id="stD"></div></section>
+ <section class="card" id="memo1" hidden></section>
+<section class="card" id="memo2" hidden></section>
+
+ <section class="card" id="dayM" hidden></section>
+ 
+ <div id="moneyS" style="display:none"></div>
+ <section class="card" id="mnS"></section>
+ <section class="card" id="mnB"></section>
+ <section class="card" id="mnF"></section>
+ <section class="card" id="mnC"></section>
+ <section class="card" id="mnD"></section>
+ <section class="card" id="mnL"></section>
+ <section class="card" id="mnR"></section>
+<section class="card" id="dayB"></section>
+ <section class="card" id="dayC"></section>
+</main>
+<div id="ov" hidden></div>
+<div id="ov2" hidden></div>
+<script src="js/state.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/grouplist.js"></script>
+<script src="js/tags.js"></script>
+<script src="js/colorpicker.js"></script>
+<script src="js/daily.js"></script>
+<script src="js/views.js"></script>
+<script src="js/money.js"></script>
+<script src="js/blocks.js"></script>
+<script src="js/export.js"></script>
+<script src="js/recurring.js"></script>
+<script src="js/repeat.js"></script>
+<script src="js/memo.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/config.js"></script>
+<script src="js/sync.js"></script>
+<script src="js/theme.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

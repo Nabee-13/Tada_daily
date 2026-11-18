@@ -1,0 +1,176 @@
+:root{--bg:#f7f7f5;--card:#fff;--tx:#222;--sub:#777;--line:#d9d9d4;--cell:#eeeeea;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1b1b1a;--card:#262625;--tx:#eee;--sub:#999;--line:#444;--cell:#333331}}
+:root[data-theme="dark"]{--bg:#1b1b1a;--card:#262625;--tx:#eee;--sub:#999;--line:#444;--cell:#333331}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:system-ui,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif}
+main{max-width:940px;margin:0 auto;padding:16px;display:grid;gap:14px;grid-template-columns:1fr}
+@media(min-width:760px){main{grid-template-columns:1fr 1fr;align-items:start}}
+.full{grid-column:1/-1}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px}
+h1{font-size:17px;margin:0;min-width:150px;text-align:center}
+.nav{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:10px}
+.tabs{display:flex;justify-content:center;gap:4px}
+.tabs button{border-radius:20px;padding:5px 16px}
+.tabs button.on{background:var(--tx);color:var(--bg);border-color:var(--tx)}
+button{font:inherit;color:inherit;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:6px 12px;cursor:pointer}
+input,select{font:inherit;color:inherit;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:6px;min-width:0}
+.tagbar{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-top:12px;justify-content:center}
+.chip{display:inline-flex;align-items:center;gap:6px;border-radius:20px;padding:4px 12px;font-size:14px}
+.chip.on{border-color:var(--tx);font-weight:600}
+.chip i{width:9px;height:9px;border-radius:50%}
+.chip.add{color:var(--sub);border-style:dashed}
+.ed{border:none;background:none;padding:2px 4px;color:var(--sub)}
+.form{display:grid;gap:8px;grid-template-columns:1fr 1fr}
+label.opt{font-size:14px;display:flex;gap:6px;align-items:center}
+ul{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:6px}
+li{border:1px solid var(--line);border-radius:8px;padding:8px}
+li .r{display:flex;align-items:center;gap:8px}
+li .dot{width:12px;height:12px;border-radius:3px;flex:none}
+li .t{flex:1}li .tm,.sub{color:var(--sub);font-size:12px}
+li.done .t{text-decoration:line-through;color:var(--sub)}
+.sm{padding:2px 8px;font-size:12px}.x{border:none;color:var(--sub);padding:0 6px;background:none}
+.gaps{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;align-items:center}
+.gaps .chip{font-size:12px;border:1px dashed var(--line);padding:2px 8px;cursor:pointer}
+.grid{display:grid;grid-template-columns:34px repeat(6,1fr);gap:3px;align-items:center}
+.wk{display:grid;grid-template-columns:30px repeat(7,1fr);gap:3px;align-items:center}
+.hd{font-size:11px;color:var(--sub);text-align:center}
+.hd.d{cursor:pointer;padding:4px 0;border-radius:6px}.hd.d:hover{background:var(--cell)}
+.hd.tdy{color:var(--tx);font-weight:700}
+.hr{font-size:11px;color:var(--sub);text-align:right;padding-right:4px}
+.c{aspect-ratio:1;border-radius:3px;background:var(--cell)}
+.hc{display:flex;gap:1px;height:16px}.hc b{flex:1;background:var(--cell);border-radius:1px}
+.mo{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.md{min-height:62px;border:1px solid var(--line);border-radius:8px;padding:4px;cursor:pointer;display:flex;flex-direction:column;gap:3px;font-size:12px}
+.md:hover{background:var(--cell)}.md.tdy{border-color:var(--tx)}.md.o{visibility:hidden}
+.md .n{color:var(--sub)}.md .bar{display:flex;height:6px;border-radius:3px;overflow:hidden;margin-top:auto}
+.stats{margin-top:12px;font-size:13px;display:grid;gap:4px}
+.stats i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px}
+.hr.nx{color:var(--tx);font-weight:700}
+.cl{margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid var(--line)}
+.clf{display:flex;gap:6px;margin:8px 0}.clf input{flex:1}
+.moods{display:flex;gap:6px;margin:8px 0}.mood{border-radius:50%;padding:4px 8px;font-size:18px;opacity:.5}.mood.on{opacity:1;border-color:var(--tx)}
+textarea{width:100%;font:inherit;color:inherit;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px;resize:vertical}
+.sum3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+.s3{border:1px solid var(--line);border-radius:10px;padding:10px;display:grid;gap:4px;text-align:center}.s3 b{font-size:15px}
+.mf{display:grid;gap:8px;max-width:520px;margin:0 auto 16px}.row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.seg{display:flex;gap:6px}.seg button{flex:1}.seg button.on{background:var(--tx);color:var(--bg);border-color:var(--tx)}
+.dist{display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin:10px 0 16px}
+.donut{width:110px;height:110px;border-radius:50%;flex:none;-webkit-mask:radial-gradient(circle,transparent 52%,#000 53%);mask:radial-gradient(circle,transparent 52%,#000 53%)}
+.dr{display:grid;gap:5px;flex:1;min-width:200px;font-size:13px}.dr div{display:flex;gap:6px;align-items:center}.dr i{width:10px;height:10px;border-radius:2px;flex:none}.dr .n{flex:1}.dr .p{color:var(--sub);width:40px;text-align:right}
+.dh{display:flex;justify-content:space-between;font-size:12px;color:var(--sub);margin:12px 0 4px;padding-bottom:4px;border-bottom:1px solid var(--line)}
+.me{display:flex;gap:8px;align-items:center;padding:5px 0;font-size:14px}.me .n{flex:1}.me .memo{color:var(--sub);font-size:12px}
+.t .memo{color:var(--sub);font-size:12px;white-space:pre-wrap}
+.sw .auto{width:auto;height:28px;border-radius:14px;padding:0 10px;font-size:12px;display:flex;align-items:center;border:1px dashed var(--line)}
+.dr .pb{display:block;height:5px;background:var(--cell);border-radius:3px;overflow:hidden;margin:-2px 0 4px}.pb span{display:block;height:100%}
+#moneyS>.seg{max-width:260px;margin:0 auto 12px}
+.bud{border:1px solid var(--line);border-radius:10px;padding:12px;margin-bottom:14px;display:grid;gap:8px}
+.bud .br{display:flex;justify-content:space-between;align-items:center;font-size:13px;gap:8px}
+.bud .bb{height:8px;background:var(--cell);border-radius:4px;overflow:hidden;margin:4px 0}.bud .bb span{display:block;height:100%}
+.brow{display:flex;align-items:center;gap:8px}.brow span{flex:1}.brow input{width:130px;text-align:right}
+#ov .card{max-height:88vh;overflow:auto}
+
+.cp{display:grid;gap:12px}
+.cp-sq{position:relative;height:150px;border-radius:8px;touch-action:none;cursor:crosshair}
+.cp-hue{position:relative;height:14px;border-radius:7px;background:linear-gradient(to right,red,yellow,lime,cyan,blue,magenta,red);touch-action:none;cursor:pointer}
+.cp-k{position:absolute;width:20px;height:20px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.3),0 1px 4px rgba(0,0,0,.4);transform:translate(-50%,-50%);pointer-events:none}
+.cp-hue .cp-k{top:50%}.cp input{text-align:center;font-family:monospace}
+.blkbar{display:flex;gap:6px;flex-wrap:wrap;align-items:center}.blkbar button.on{background:var(--tx);color:var(--bg);border-color:var(--tx)}
+section.ed{outline:2px dashed var(--line);outline-offset:3px;cursor:grab}
+.bt{display:flex;gap:4px;align-items:center;margin-bottom:10px;padding-bottom:8px;border-bottom:1px dashed var(--line);font-size:12px;color:var(--sub)}
+#dayN textarea,#dayD textarea{margin-top:6px}
+#ov{position:fixed;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;padding:16px;z-index:20}
+#ov .card{width:100%;max-width:340px;display:grid;gap:12px}
+.sw{display:flex;flex-wrap:wrap;gap:10px}
+.sw span{width:28px;height:28px;border-radius:50%;cursor:pointer;position:relative;outline:2px solid transparent;outline-offset:2px}
+.sw span.on{outline-color:var(--tx)}
+.sw input{position:absolute;inset:0;opacity:0;width:100%;height:100%;cursor:pointer;padding:0;border:none}
+.btns{display:flex;gap:8px;justify-content:flex-end}.btns .del{margin-right:auto;color:#e5484d}
+
+/* ---- 꾸미기: 강조색, 구역, 사이드바(PC)/하단 탭(폰), 달력 위젯 ---- */
+:root{--ac:#3e63dd}
+.tabs button.on,.seg button.on,.blkbar button.on,.sm.on{background:var(--ac);color:#fff;border-color:var(--ac)}
+.zone{display:grid;gap:14px;align-content:start;min-width:0}#zT{grid-column:1/-1}
+.logo{font-size:26px;text-align:center;margin-bottom:8px}
+.cdot{width:28px;height:28px;border-radius:50%;padding:0}
+.mc{aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:12px;border-radius:8px;cursor:pointer}
+.mc.sel{background:var(--ac);color:#fff}.mc.tdy{outline:1px solid var(--ac)}.mc i{width:5px;height:5px;border-radius:50%;background:var(--ac);margin-top:2px}.mc.sel i{background:#fff}
+@media(min-width:760px){body{padding-left:92px}.tabs{position:fixed;left:0;top:0;bottom:0;width:84px;flex-direction:column;justify-content:flex-start;gap:6px;padding:14px 8px;background:var(--card);border-right:1px solid var(--line);z-index:5}.tabs button{border-radius:10px;padding:8px 4px;font-size:13px}.vs{margin-top:auto}}
+@media(max-width:759px){.logo,.vs{display:none}.tabs{position:fixed;left:0;right:0;bottom:0;justify-content:space-around;background:var(--card);border-top:1px solid var(--line);padding:6px 6px calc(6px + env(safe-area-inset-bottom,0px));z-index:5}.tabs button{border-radius:10px;padding:6px 8px;font-size:12px}body{padding-bottom:70px}}
+
+/* ---- 위젯형 주간/월간, 날짜 이동은 달력 위젯으로 (상단 날짜줄·태그줄은 숨김) ---- */
+.nav,.tagbar{display:none}
+.wp{display:grid;grid-template-columns:50px repeat(7,1fr);gap:2px;margin-top:8px}
+.wp .wl{font-size:12px;color:var(--sub);display:flex;align-items:center;cursor:pointer;padding:6px 2px}
+.wp .wd{text-align:center;padding:6px 0;font-size:12px;border-radius:6px;cursor:pointer}
+.wp .rs{background:color-mix(in srgb,var(--ac) 18%,transparent)}.wp .wd.tdy{outline:1px solid var(--ac)}
+.mp{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:10px}.mp button.sel{background:var(--ac);color:#fff;border-color:var(--ac)}
+#wkL .cl,#moL .cl{border:0;margin:0;padding:0}
+
+/* ---- 일간 시간표 칸 작게 (정사각형 → 낮은 직사각형), 폰 하단 탭에 설정 버튼 보이기 ---- */
+.grid{gap:2px}.c{aspect-ratio:auto;height:20px}.grid .hr,.grid .hd{font-size:10px}
+@media(max-width:759px){.vs{display:inline-block}}
+
+/* ---- 가운데 확인 팝업, 가계부 위젯 ---- */
+#ov2{position:fixed;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;padding:16px;z-index:30}
+#ov2 .card{width:100%;max-width:320px;display:grid;gap:14px}#ov2 p{margin:0;line-height:1.5}
+#mnS>.seg{max-width:260px;margin:0 auto 12px}
+
+/* ================= 새 디자인 (투두메이트 느낌: 둥글고 부드럽게) ================= */
+:root{--bg:#f4f5f7;--card:#fff;--tx:#1f2328;--sub:#8b919c;--line:#e9ebef;--cell:#f1f2f5;--ac:#4f6bff}
+body{font-size:15px}
+main{max-width:1100px;padding:20px 20px 90px;gap:16px}.zone{gap:16px}
+.card{border:0;border-radius:20px;padding:18px;box-shadow:0 1px 2px rgba(20,24,40,.04),0 4px 14px rgba(20,24,40,.05)}
+.card>b:first-child{font-size:16px;display:block;margin-bottom:6px}
+button{border:0;background:var(--cell);border-radius:999px;padding:7px 14px}button:hover{filter:brightness(.96)}
+input,select,textarea{background:var(--cell);border:1px solid transparent;border-radius:12px;padding:9px 12px}
+input:focus,select:focus,textarea:focus{outline:0;border-color:var(--ac)}
+input[type=checkbox]{-webkit-appearance:none;appearance:none;width:22px;height:22px;border-radius:50%;border:2px solid var(--line);background:var(--card);padding:0;cursor:pointer;flex:none;display:inline-grid;place-content:center}
+input[type=checkbox]:checked{background:var(--ac);border-color:var(--ac)}input[type=checkbox]:checked::after{content:"\2713";color:#fff;font-size:13px;line-height:1}
+li{border:0;background:var(--cell);border-radius:14px;padding:10px 12px}
+.grp{margin-top:16px}.gh{display:flex;align-items:center;gap:8px;background:var(--cell);border-radius:999px;padding:4px 5px 4px 14px;width:fit-content;margin-bottom:8px}
+.gn{font-weight:700}.gp{width:28px;height:28px;border-radius:50%;padding:0;line-height:1;font-size:18px;background:var(--card)}.grab{cursor:grab;color:var(--sub);font-size:13px}
+.md,.mc{border:0}.md{background:var(--cell);border-radius:12px}.mc{border-radius:50%}
+.wp .rs{border-radius:8px}.chip{background:var(--cell)}.bud{border:0;background:var(--cell);border-radius:14px}.s3{border:0;background:var(--cell);border-radius:14px}
+#ov .card,#ov2 .card{box-shadow:0 14px 44px rgba(0,0,0,.22)}
+@media(min-width:760px){body{padding-left:100px}.tabs{width:92px;padding:18px 10px;border-right:0;box-shadow:2px 0 14px rgba(20,24,40,.06)}.tabs button{background:transparent;border-radius:14px;padding:10px 4px}.tabs button:hover{background:var(--cell)}}
+@media(max-width:759px){.tabs{border-top:0;border-radius:20px 20px 0 0;box-shadow:0 -4px 18px rgba(20,24,40,.09)}.tabs button{background:transparent}main{padding:14px 14px 90px}}
+
+/* ---- 추가 버튼, 메모장, 접기, 끌기 표시, 날짜 이동줄 고정 ---- */
+.addbtn{width:100%;background:var(--ac);color:#fff;border-radius:14px;padding:11px;font-weight:600}
+.card{position:relative}.cbtn{position:absolute;top:10px;right:10px;width:28px;height:28px;padding:0;border-radius:50%;background:transparent;color:var(--sub);z-index:2}
+
+.mh{flex-wrap:nowrap;padding-right:34px}.mname{flex:1;font-weight:700;font-size:16px;background:transparent;padding:4px 6px}.mname:focus{background:var(--cell)}
+.grab{touch-action:none;padding:2px 4px}li.dragging{opacity:.45}.dropt{outline:2px dashed var(--ac);outline-offset:2px}
+.mnav,#dayC .row:first-child,#wkP .row:first-child,#moP .row:first-child{flex-wrap:nowrap;gap:10px}
+.mnav b{flex:1;min-width:8.5em;white-space:nowrap}.mnav button,#dayC .row:first-child button,#wkP .row:first-child button,#moP .row:first-child button{flex:none;min-width:34px}
+
+/* ---- 추가 버튼은 차분하게, 접기(▾)는 제목줄 맨 앞, 달력은 모두 같은 둥근 네모 ---- */
+.addbtn{background:var(--cell);color:var(--tx);border:1.5px dashed var(--line);font-weight:600}.addbtn:hover{border-color:var(--sub)}
+.logo small{display:block;font-size:10px;line-height:1.25;margin-top:4px;color:var(--sub);font-weight:700}
+.cbtn{position:static;top:auto;right:auto;width:28px;height:28px;flex:none;padding:0;margin-right:6px;vertical-align:middle;border-radius:50%;background:transparent;color:var(--sub)}
+.cbtn+b{display:inline-block;vertical-align:middle;font-size:16px;margin-bottom:8px}
+.hw{display:flex;align-items:center;gap:2px;margin-bottom:8px}.hw>b{font-size:16px}#dayB .hw{padding:8px 10px}
+.row>b,.hw>b{flex:none!important}
+
+.mh{padding-right:0}
+.col>*:not(.hh):not(.cbtn):not(.bt){display:none!important}.col .cl>:not(.hh):not(.cbtn){display:none!important}.col::before{content:none}.col{padding-top:14px;padding-bottom:14px}
+.mo,.wp{gap:4px}
+.md,.mc,.wd,.wl{border-radius:10px;background:var(--cell);border:0}
+.mc,.wd,.wl{aspect-ratio:auto;height:34px;display:flex;flex-direction:row;align-items:center;justify-content:center;padding:0;position:relative;font-size:12px;cursor:pointer}
+.mc i{position:absolute;bottom:4px;left:50%;transform:translateX(-50%);margin:0}
+.md.out,.mc.out,.wd.out{background:color-mix(in srgb,var(--tx) 13%,var(--card));color:var(--sub)}
+.md.sel,.mc.sel,.wd.sel{background:var(--cell);outline:2px solid var(--ac);outline-offset:-2px;color:var(--tx);font-weight:700}
+.md.tdy,.mc.tdy,.wd.tdy{color:var(--ac);font-weight:700}
+.wp .rs{background:color-mix(in srgb,var(--ac) 16%,var(--cell))}.wp .wl.rs{font-weight:700}
+
+/* ---- 이동 버튼(오늘·올해·‹ ›)은 제목줄 오른쪽 끝에 고정, 제목은 남는 자리를 차지 (제목 길이가 바뀌어도 버튼은 안 움직인다) ---- */
+.card>.row:first-child>b,.mnav>b{flex:1!important;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* ---- 달력 칸: 완료한 일 점, 다 했으면 강조 / 시간표 선택 표시 ---- */
+.md .dots{display:flex;gap:2px;flex-wrap:wrap}.md .dots i{width:6px;height:6px;border-radius:50%}.md .all{color:var(--ac);font-weight:700}
+.c.pick{outline:2px solid var(--ac);outline-offset:-2px}.grid .c{cursor:crosshair}
+
+/* ---- 동기화 칸 ---- */
+.syncbox{display:grid;gap:8px;margin:6px 0 16px;padding-bottom:14px;border-bottom:1px solid var(--line)}.syncbox p{margin:0}
