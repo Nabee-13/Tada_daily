@@ -17,7 +17,8 @@ function renderDay(){
   var cb=el("input");cb.type="checkbox";cb.checked=t.d;cb.onchange=function(){t.d=cb.checked;save();render()};
   var dot=el("span","dot");dot.style.background=tg.color;
   dot.style.background=t.color||tg.color;var nm2=el("span","t",(t.rid?"↻ ":"")+t.n);if(t.memo)nm2.appendChild(el("div","memo",t.memo));
-  r.append(cb,dot,nm2,el("span","tm",(t.s!=null?hmL(t.s)+"–"+hmL(t.e):"")));var eb=el("button","sm","✎");eb.onclick=function(){openTask(t)};r.appendChild(eb);
+  if(t.s!=null)nm2.insertBefore(el("div","tm2",hmL(t.s)+"–"+hmL(t.e)),nm2.querySelector(".memo"));   /* 시간은 이름 아래 줄에 */
+  r.append(cb,dot,nm2);var eb=el("button","sm","✎");eb.onclick=function(){openTask(t)};r.appendChild(eb);
   if(t.s!=null){var gb=el("button","sm","빈 시간");gb.onclick=function(){openGap=openGap===t.id?null:t.id;render()};r.appendChild(gb)}
   var x=el("button","x","✕");x.onclick=function(){if(t.rid){var rr=db.repeats.find(function(q){return q.id===t.rid});if(rr)(rr.skip=rr.skip||[]).push(key(cur))}   /* 반복 할 일을 지우면 그 날은 다시 만들지 않는다 */
    var a=allOf(cur);a.splice(a.indexOf(t),1);save();render()};
