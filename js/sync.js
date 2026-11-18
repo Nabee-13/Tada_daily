@@ -1,12 +1,14 @@
 /* 동기화(로그인): Supabase에 db를 올리고 내려받아 폰·PC가 같은 데이터를 쓴다. 주소·키는 js/config.js, 표 만들기는 supabase_setup.sql
  * 규칙: 마지막으로 저장한 쪽이 이긴다(db.mt = 마지막 수정 시각). 서버가 더 새로우면 받아서 새로고침, 이 기기가 더 새로우면 올린다. */
-var sb=null,syncSt={user:null,last:"",err:"",busy:false,imgStr:null,timer:null};
+var sb=null,syncSt={user:null,last:"",err:"",busy:false,imgStr:null,timer:null,seen:0,act:0};   // seen: 마지막으로 확인한 서버 수정 시각, act: 마지막 조작 시각
 if(window.supabase&&SYNC_CFG.url&&SYNC_CFG.key){try{sb=window.supabase.createClient(SYNC_CFG.url,SYNC_CFG.key)}catch(e){syncSt.err=e.message}}
 
 // 올릴 데이터: main = 이미지를 뺀 db 전체 / img = 화면별 이미지(용량이 커서 따로, 바뀔 때만 올린다)
 function syncData(p){if(p==="img")return db.banners||{};var o=Object.assign({},db);delete o.banners;return o}
 function syncTime(){var d=new Date();return hm(d.getHours()*60+d.getMinutes())}
-function syncFail(e){syncSt.err=(e&&e.message)||String(e)}
+function syncFail(e){syncSt.err=(e&&e.message)||String(e);syncMark()}
+// 사이드바 로고 아래에 동기화 상태를 작게 보여준다 (☁ 시각 / ☁ ⚠)
+function syncMark(){var s=$("syncst");if(s)s.textContent=sb&&syncSt.user?(syncSt.err?"☁ ⚠":"☁ "+syncSt.last):""}
 // 버튼 핸들러를 오류가 나도 팝업으로 알려주게 감싼다
 function guard(fn){return async function(){try{await fn()}catch(e){tell("오류: "+((e&&e.message)||e))}}}
 
@@ -24,17 +26,17 @@ async function syncApply(main){var img=await syncGet("img"),d=Object.assign({},m
  localStorage.setItem("planner_synced",syncSt.user.id);location.reload()}
 
 // 동기화 한 번. 이 기기가 처음 이 계정과 만났는데 서로 다르면 어느 쪽을 쓸지 묻는다
-async function syncNow(){if(!sb||!syncSt.user)return;if(syncSt.busy){syncHook();return}syncSt.busy=true;syncSt.err="";
+async function syncNow(auto){if(!sb||!syncSt.user)return;if(syncSt.busy){syncHook();return}syncSt.busy=true;syncSt.err="";
  try{var main=await syncGet("main"),rm=main?main.mt||0:0,lm=db.mt||0,first=localStorage.getItem("planner_synced")!==syncSt.user.id;
   if(!main){await syncPrimeImg();await syncPush()}
   else if(first&&lm>0&&rm!==lm){syncSt.busy=false;
    ask("이 기기의 데이터와 서버 데이터가 서로 달라요. 어느 쪽을 쓸까요? (고르지 않은 쪽은 덮어써져요)",guard(function(){return syncApply(main)}),
     {yes:"서버 데이터 쓰기",no:"이 기기 데이터 올리기",onNo:guard(async function(){await syncPrimeImg();await syncPush();localStorage.setItem("planner_synced",syncSt.user.id)})});return}
-  else if(rm>lm){await syncApply(main);return}
+  else if(rm>lm){if(auto===true&&Date.now()-syncSt.act<8000)return;await syncApply(main);return}   // 자동 확인 중에 방금 입력했다면 이번엔 미룬다
   else if(lm>rm){await syncPrimeImg();await syncPush()}
   else await syncPrimeImg();
-  localStorage.setItem("planner_synced",syncSt.user.id);if(!syncSt.last)syncSt.last=syncTime()}
- catch(e){syncFail(e)}finally{syncSt.busy=false}}
+  localStorage.setItem("planner_synced",syncSt.user.id);syncSt.last=syncTime();syncSt.seen=await syncStamp()}
+ catch(e){syncFail(e)}finally{syncSt.busy=false;syncMark()}}
 
 // 저장할 때마다(state.js의 save가 부른다) 3초 뒤 동기화
 function syncHook(){if(!sb||!syncSt.user)return;clearTimeout(syncSt.timer);syncSt.timer=setTimeout(syncNow,3000)}
@@ -60,3 +62,11 @@ function syncBox(){var w=el("div","syncbox");w.appendChild(el("b",null,"동기�
    if(r.data.session){syncSt.user=r.data.user;await syncNow();openSettings()}else tell("가입했어요! 이메일로 온 확인 링크를 누른 뒤 로그인해 주세요.")});
   r2.append(li,su);w.append(em,pw,r2,el("p","sub","다른 기기에서도 같은 이메일로 로그인하면 같은 데이터가 보여요."))}
  return w}
+
+// 서버 main의 수정 시각만 가볍게 읽는다 (데이터 전체를 받지 않아서 자주 확인해도 부담이 적다)
+async function syncStamp(){var r=await sb.from("planner_data").select("updated_at").eq("user_id",syncSt.user.id).eq("part","main").maybeSingle();if(r.error)throw r.error;return r.data?Date.parse(r.data.updated_at):0}
+// 자동 확인: 30초마다(화면이 보일 때만) 서버 시각이 바뀌었는지 보고, 바뀌었으면 동기화. 입력 중에는 새로고침하지 않고 미룬다
+async function syncPoll(){if(!sb||!syncSt.user||syncSt.busy||document.visibilityState!=="visible")return;
+ try{var t=await syncStamp();if(t&&t!==syncSt.seen)await syncNow(true)}catch(e){syncFail(e)}}
+setInterval(syncPoll,30000);
+["pointerdown","keydown","input"].forEach(function(ev){document.addEventListener(ev,function(){syncSt.act=Date.now()},true)});

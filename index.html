@@ -5,11 +5,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>쨔뿌러지는일과</title>
 <link rel="stylesheet" href="css/style.css">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#f4f5f7">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="일과">
 </head>
 <body>
 <main>
  <header class="full">
-  <div class="tabs"><div class="logo">🗓️<small>쨔뿌러지는<br>일과</small></div><button id="vd">일간</button><button id="vw">주간</button><button id="vm">월간</button><button id="vy">가계부</button><button id="vs" class="vs">⚙ 설정</button></div>
+  <div class="tabs"><div class="logo">🗓️<small>쨔뿌러지는<br>일과</small><small id="syncst"></small></div><button id="vd">일간</button><button id="vw">주간</button><button id="vm">월간</button><button id="vy">가계부</button><button id="vs" class="vs">⚙ 설정</button></div>
   <div class="nav"><button id="prev">◀</button><h1 id="title"></h1><button id="next">▶</button><button id="today">오늘</button></div>
   <div class="tagbar" id="tagbar"></div>
  </header>
@@ -70,6 +76,7 @@
 <script src="js/config.js"></script>
 <script src="js/sync.js"></script>
 <script src="js/theme.js"></script>
+<script src="js/pwa.js"></script>
 <script src="js/app.js"></script>
 </body>
 </html>
