@@ -7,8 +7,8 @@ function mins(v){var p=v.split(":");return +p[0]*60+ +p[1]}
 function hm(m){return String(Math.floor(m/60)%24).padStart(2,"0")+":"+String(m%60).padStart(2,"0")}
 // hm + 자정 이후면 "익일" 표시 (화면 출력용)
 function hmL(m){return(m>=1440?"익일 ":"")+hm(m)}
-// 입력 시각 → 기록용 분. 7시 이전은 "다음 날 새벽"이라 1440분을 더한다
-function toM(v){var m=mins(v);return m<420?m+1440:m}
+// 입력 시각 → 기록용 분. 하루 시작 시각(H0) 이전은 "다음 날 새벽"이라 1440분을 더한다
+function toM(v){var m=mins(v);return m<H0*60?m+1440:m}
 // 그날의 할 일 배열 (없으면 새로 만든다)
 function allOf(d){return db.days[key(d)]||(db.days[key(d)]=[])}
 // 그날의 할 일 중 현재 태그 필터에 맞는 것만
@@ -16,9 +16,11 @@ function dayT(d){return(db.days[key(d)]||[]).filter(function(t){return filt==="a
 // 태그 id → 태그 객체 (없으면 "태그 없음" 기본값)
 function tagOf(id){return db.tags.filter(function(t){return t.id===id})[0]||{id:"",name:"태그 없음",color:"#6e7781"}}
 // 완료됐거나 "체크 안 해도 칠하기"를 켠 시간 할 일을 1분 단위 색칠 정보(겹치면 층별로)로 바꾼다
-function paint(T){var L=[];T.forEach(function(t){if(t.s==null||(!t.d&&!t.fill))return;var a=new Array(1440).fill(false);for(var m=Math.max(t.s,420);m<Math.min(t.e,1860);m++)a[m-420]=!t.gaps.some(function(q){return m>=q.s&&m<q.e});L.push({col:t.color||tagOf(t.tag).color,a:a})});return L}
+function paint(T){var L=[];T.forEach(function(t){if(t.s==null||(!t.d&&!t.fill))return;var a=new Array(1440).fill(false);for(var m=Math.max(t.s,H0*60);m<Math.min(t.e,H1*60);m++)a[m-H0*60]=!t.gaps.some(function(q){return m>=q.s&&m<q.e});L.push({col:t.color||tagOf(t.tag).color,a:a})});return L}
+// 전날에서 이어진 시간: 어제 시작해 오늘 시작 시각을 넘어 끝나는 할 일을, 오늘 시간표 좌표로 옮긴 사본으로 돌려준다 (시간표 색칠에만 쓴다)
+function spillT(d){var p=new Date(d.getFullYear(),d.getMonth(),d.getDate()-1),E=H1*60;return(db.days[key(p)]||[]).filter(function(t){return t.s!=null&&t.e>E&&(filt==="all"||t.tag===filt)}).map(function(t){return Object.assign({},t,{s:Math.max(t.s,E)-1440,e:t.e-1440,gaps:(t.gaps||[]).map(function(q){return{s:q.s-1440,e:q.e-1440}})})})}
 // 10분 칸 하나의 CSS 배경(반투명 색 층들)을 만든다. 5분이면 칸의 절반만 칠해진다
-function bg(L,a){var i=a-420,out=[];L.forEach(function(l){var st=[],p=0,any=false;while(p<10){var c=l.a[i+p],j=p;while(j<10&&l.a[i+j]===c)j++;st.push((c?l.col+"80":"transparent")+" "+p*10+"% "+j*10+"%");if(c)any=true;p=j}if(any)out.push("linear-gradient(to right,"+st.join(",")+")")});return out.join(",")}
+function bg(L,a){var i=a-H0*60,out=[];L.forEach(function(l){var st=[],p=0,any=false;while(p<10){var c=l.a[i+p],j=p;while(j<10&&l.a[i+j]===c)j++;st.push((c?l.col+"80":"transparent")+" "+p*10+"% "+j*10+"%");if(c)any=true;p=j}if(any)out.push("linear-gradient(to right,"+st.join(",")+")")});return out.join(",")}
 // 완료된 할 일의 태그별 시간(분)을 tot에 누적한다 (빈 시간 제외)
 function addMin(T,tot){T.forEach(function(t){if(!t.d||t.s==null)return;var d=t.e-t.s;t.gaps.forEach(function(q){d-=Math.max(0,Math.min(q.e,t.e)-Math.max(q.s,t.s))});tot[t.tag]=(tot[t.tag]||0)+d})}
 var $=function(i){return document.getElementById(i)};

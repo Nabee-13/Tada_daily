@@ -16,7 +16,7 @@ function renderWeek(){
  w.appendChild(el("div"));
  for(var i=0;i<7;i++){var d=new Date(ws);d.setDate(ws.getDate()+i);days.push(d);
   var h=el("div","hd d"+(key(d)===td?" tdy":""),DN[i]+" "+d.getDate());
-  (function(d){h.onclick=function(){cur=d;view="day";render()}})(d);w.appendChild(h);addMin(dayT(d),tot)}var PS=days.map(function(d){return paint(dayT(d))});
+  (function(d){h.onclick=function(){cur=d;view="day";render()}})(d);w.appendChild(h);addMin(dayT(d),tot)}var PS=days.map(function(d){return paint(dayT(d).concat(spillT(d)))});
  for(var hr=H0;hr<H1;hr++){w.appendChild(el("div","hr"+(hr>=24?" nx":""),(hr%24)+"시"));
   days.forEach(function(d,di){var A=PS[di],hc=el("div","hc");
    for(var c=0;c<6;c++){var a=hr*60+c*10,s=el("b");s.style.backgroundImage=bg(A,a);hc.appendChild(s)}
@@ -29,9 +29,10 @@ function calCell(cd,onPick,tot){var dt=cd.dt,k=key(dt),box=el("div","md"+(cd.out
  box.appendChild(el("span","n",String(dt.getDate())));
  if(!cd.out){var T=dayT(dt),dm={},dn=T.filter(function(t){return t.d});addMin(T,dm);if(tot)addMin(T,tot);
   if(dn.length){var dots=el("div","dots");dn.slice(0,6).forEach(function(t){var i=el("i");i.style.background=t.color||tagOf(t.tag).color;dots.appendChild(i)});box.appendChild(dots)}
-  if(T.length)box.appendChild(el("span",dn.length===T.length?"all":null,dn.length+"/"+T.length));
+  if(T.length&&db.showCnt)box.appendChild(el("span",dn.length===T.length?"all":null,dn.length+"/"+T.length));
   var ks=Object.keys(dm);if(ks.length){var sum=ks.reduce(function(a,k2){return a+dm[k2]},0),bar=el("div","bar");
    ks.forEach(function(k2){var s=el("span");s.style.background=tagOf(k2).color;s.style.flex=dm[k2]/Math.max(sum,1);bar.appendChild(s)});box.appendChild(bar)}}
+ if(!cd.out){annivOn(dt).forEach(function(a){var s=el("span","an",a.n);s.style.color=a.color;s.title=a.n;box.appendChild(s)})}   /* 기념일 (anniv.js) */
  box.onclick=function(){onPick(dt)};return box}
 
 // 월간 화면: 달력과 월 통계. 칸을 누르면 그 날의 일간 화면으로 이동

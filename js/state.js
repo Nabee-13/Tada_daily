@@ -16,6 +16,7 @@ try{var raw=JSON.parse(localStorage.getItem("planner")||"null");
 db.weeks=db.weeks||{};db.months=db.months||{};db.diary=db.diary||{};db.money=db.money||[];db.budget=db.budget||{};db.note=db.note||"";db.layout=db.layout||[];
 var BLK={dayL:"체크리스트",dayG:"시간표",dayS:"시간 배분",dayM:"오늘의 가계부",memo1:"메모장 1",memo2:"메모장 2",dayC:"달력",dayB:"이미지",wkP:"주차 달력",wkG:"주간 시간표",wkL:"주간 체크리스트",wkS:"주간 통계",moP:"월 선택",moG:"월간 달력",moL:"월간 체크리스트",moS:"월간 통계",mnS:"가계부 요약",mnB:"월 예산",mnF:"입력",mnC:"가계부 캘린더",mnD:"수입·지출 분포",mnL:"내역",mnR:"정기 결제"};
 Object.keys(BLK).forEach(function(id){if(!db.layout.some(function(b){return b.id===id}))db.layout.push({id:id,w:"half",on:id!=="dayM"&&id!=="dayN"})});
+H0=db.dayStart==null?7:db.dayStart;H1=H0+24;   /* 하루 시작 시각(설정에서 변경) */
 db.cats=db.cats||{exp:[],inc:[]};   // 기본 카테고리 없음: 직접 추가
 if(db.v!==2){Object.keys(db.days).forEach(function(k){db.days[k].forEach(function(t){if(t.s==null||t.s>=420)return;if(t.e<=420){t.s+=1440;t.e+=1440;t.gaps=t.gaps.map(function(q){return{s:q.s+1440,e:q.e+1440}})}else{t.s=420;t.gaps=t.gaps.filter(function(q){return q.e>420}).map(function(q){return{s:Math.max(q.s,420),e:q.e}})}})});db.v=2}
 // db 전체를 브라우저(localStorage)에 저장한다. 데이터를 바꾼 뒤엔 항상 호출. quiet=true(반복·정기 결제 자동 생성)면 수정 시각을 안 바꾸고 동기화도 안 한다

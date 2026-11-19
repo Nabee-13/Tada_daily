@@ -111,7 +111,7 @@ function openSettings(){var ov=$("ov");ov.hidden=false;ov.innerHTML="";var card=
  // 반복 일정 목록 (눌러서 수정/삭제)
  var rl2=el("div","row");rl2.style.margin="6px 0 12px";
  db.repeats.forEach(function(r){var c=el("button","chip",r.n+" · "+repLabel(r));c.onclick=function(){openTask(r,{rule:true})};rl2.appendChild(c)});
- if(!db.repeats.length)rl2.appendChild(el("span","sub","없음 (할 일 추가 팝업에서 반복을 고르면 생겨요)"));card.append(el("b",null,"반복 일정"),rl2);
+ if(!db.repeats.length)rl2.appendChild(el("span","sub","없음 (할 일 추가 팝업에서 반복을 고르면 생겨요)"));card.append(el("b",null,"반복 일정"),rl2);card.append(annivBox(),dayStartBox());
  // 내보내기: 달을 고르고 JSON(전체 데이터) 또는 CSV(엑셀용 표)로 저장
  var ex=el("div","row"),ys=el("select"),ms=el("select"),y0=cur.getFullYear();ex.style.margin="6px 0 12px";
  for(var yy=y0-3;yy<=y0+1;yy++){var oy=el("option",null,yy+"년");oy.value=yy;ys.appendChild(oy)}ys.value=y0;

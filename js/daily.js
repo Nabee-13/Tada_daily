@@ -26,7 +26,7 @@ function renderDay(){
   if(t.s!=null&&(t.gaps.length||openGap===t.id)){var g=el("div","gaps");
    t.gaps.forEach(function(q,i){var ch=el("span","chip","쉬는 시간 "+hmL(q.s)+"–"+hmL(q.e)+" ✕");ch.onclick=function(){t.gaps.splice(i,1);save();render()};g.appendChild(ch)});
    if(openGap===t.id){var a=el("input");a.type="time";a.step=60;a.value=hm(t.s);var b=el("input");b.type="time";b.step=60;b.value=hm(Math.min(t.s+30,t.e));
-    var ok=el("button","sm","추가");ok.onclick=function(){var gs=toM(a.value),ge=toM(b.value);if(ge===420&&gs>420)ge=1860;
+    var ok=el("button","sm","추가");ok.onclick=function(){var gs=toM(a.value),ge=toM(b.value);if(ge<gs)ge+=1440;   /* 끝이 더 빠르면 다음 날로 이어짐 */
      if(ge<=gs){tell("끝 시간이 더 늦어야 해요.");return}
      if(gs<t.s||ge>t.e){tell("할 일 시간("+hmL(t.s)+"–"+hmL(t.e)+") 안에서 정해 주세요.");return}
      t.gaps.push({s:gs,e:ge});save();render()};
@@ -36,7 +36,7 @@ function renderDay(){
   dragSort(li,r,t,allOf(cur));   /* 순서 바꾸기 (grouplist.js) */
   });
  if(!GR[""].children.length)w0.remove();   // 태그 없는 할 일이 없으면 그 묶음은 감춘다
- var g=$("grid");g.innerHTML="";g.appendChild(el("div"));var A=paint(T);
+ var g=$("grid");g.innerHTML="";g.appendChild(el("div"));var A=paint(T.concat(spillT(cur)));
  for(var m=0;m<6;m++)g.appendChild(el("div","hd",m*10+"분"));
  for(var hr=H0;hr<H1;hr++){g.appendChild(el("div","hr"+(hr>=24?" nx":""),(hr%24)+"시"));
   for(var c=0;c<6;c++){var a2=hr*60+c*10,cell=el("div","c");cell.style.backgroundImage=bg(A,a2);cell.dataset.m=a2;g.appendChild(cell)}}
@@ -52,6 +52,8 @@ function renderDay(){
   if(gridPend==null){gridPend=s0;mark(s0,s0);return}
   finish(Math.min(gridPend,s0),Math.max(gridPend,s0)+10)};
  mark(gridPend,gridPend);
+ var sp=spillT(cur),old=g.parentNode.querySelector(".spn");if(old)old.remove();   /* 전날에서 이어진 일정 안내 */
+ if(sp.length){var sn=el("p","sub spn","어제에서 이어진 일정: "+sp.map(function(t){return t.n+" (~"+hm(t.e)+")"}).join(", "));g.after(sn)}
  var tot={};addMin(T,tot);showStats($("stD"),tot)}
 
 // 할 일 추가/수정 팝업. t가 null이면 새로 추가.
@@ -71,7 +73,7 @@ function openTask(t,o){o=o||{};var R=o.rule?t:null,isNew=!t,ov=$("ov");ov.hidden
    PAL.forEach(function(c){var x=el("span",c===st.color?"on":"");x.style.background=c;x.onclick=function(){st.color=c;drawSw()};sw.appendChild(x)});
    var cu2=st.color&&PAL.indexOf(st.color)<0,cu=el("span",cu2?"on":"");cu.style.background=cu2?st.color:"conic-gradient(red,yellow,lime,cyan,blue,magenta,red)";cu.onclick=function(){pk.hidden=!pk.hidden};sw.appendChild(cu)};
   var pk=colorPicker(st.color||"#3e63dd",function(h){st.color=h;drawSw()});pk.hidden=true;drawSw();
-  card.append(lb,tm,fl,el("span","sub","칠해지는 색 (기본은 태그 색)"),sw,pk);
+  card.append(lb,tm,el("span","sub","끝 시간이 시작보다 빠르면 다음 날까지 이어져요 (예: 23:00 ~ 07:00)"),fl,el("span","sub","칠해지는 색 (기본은 태그 색)"),sw,pk);
   if(isNew||R){   // 반복: 안 함 / 매일 / 매주(요일 고르기) / 매월(날짜), 시작일·종료일
    rp=el("select");(R?[["daily","매일"],["weekly","매주"],["monthly","매월"]]:[["","반복 안 함"],["daily","매일"],["weekly","매주"],["monthly","매월"]]).forEach(function(p){var q=el("option",null,p[1]);q.value=p[0];rp.appendChild(q)});rp.value=R?R.kind:"";
    var wr=el("div","row"),dl=el("span","sub","시작일 · 종료일 (종료일은 비워도 돼요)"),dr=el("div","row2");dm=el("select");fr=el("input");to=el("input");fr.type=to.type="date";fr.value=R?R.from:key(cur);to.value=R&&R.to||"";dr.append(fr,to);
@@ -82,7 +84,7 @@ function openTask(t,o){o=o||{};var R=o.rule?t:null,isNew=!t,ov=$("ov");ov.hidden
  var b=el("div","btns"),cc=el("button",null,"취소"),ok=el("button",null,"저장");cc.onclick=function(){ov.hidden=true};ok.style.background="var(--ac)";ok.style.color="#fff";
  ok.onclick=function(){var n=nm.value.trim();if(!n){nm.focus();return}var data={n:n,memo:mm.value.trim(),tag:tg.value},rk=rp?rp.value:"";
   if(!o.noTime){var ns=null,ne=null,gp=[];
-   if(ut.checked){ns=toM(s.value);ne=toM(e.value);if(ne===420&&ns>420)ne=1860;if(ne<=ns){tell("끝나는 시간이 시작보다 늦어야 해요.");return}
+   if(ut.checked){ns=toM(s.value);ne=toM(e.value);if(ne<ns)ne+=1440;   /* 끝이 시작보다 빠르면 다음 날까지 이어지는 일정 */if(ne<=ns){tell("끝나는 시간이 시작보다 늦어야 해요.");return}
     gp=((t&&t.gaps)||[]).map(function(q){return{s:Math.max(q.s,ns),e:Math.min(q.e,ne)}}).filter(function(q){return q.e>q.s})}
    data.s=ns;data.e=ne;data.gaps=gp;data.color=st.color;data.fill=ns!=null&&fi.checked}
   if(R||rk){   // 반복 규칙으로 저장
