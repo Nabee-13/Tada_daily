@@ -81,6 +81,7 @@ function openTask(t,o){o=o||{};var R=o.rule?t:null,isNew=!t,ov=$("ov");ov.hidden
    for(var dd=1;dd<=31;dd++){var q=el("option",null,"매월 "+dd+"일");q.value=dd;dm.appendChild(q)}dm.value=R?R.dom:cur.getDate();
    var shw=function(){wr.hidden=rp.value!=="weekly";dm.hidden=rp.value!=="monthly";dl.hidden=dr.hidden=!rp.value};rp.onchange=shw;shw();
    card.append(el("b",null,"반복"),rp,wr,dm,dl,dr)}}
+ if(t&&!R&&!o.noTime&&allOf(cur).indexOf(t)>=0)card.appendChild(moveBox(t));   /* 다른 날로 옮기기·복사 (move.js) */
  var b=el("div","btns"),cc=el("button",null,"취소"),ok=el("button",null,"저장");cc.onclick=function(){ov.hidden=true};ok.style.background="var(--ac)";ok.style.color="#fff";
  ok.onclick=function(){var n=nm.value.trim();if(!n){nm.focus();return}var data={n:n,memo:mm.value.trim(),tag:tg.value},rk=rp?rp.value:"";
   if(!o.noTime){var ns=null,ne=null,gp=[];

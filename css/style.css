@@ -192,3 +192,4 @@ li{border:0;background:var(--cell);border-radius:14px;padding:10px 12px}
 
 /* ---- 기념일 (달력 칸) ---- */
 .md .an{font-size:11px;font-weight:700;line-height:1.15;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:block}
+#dayL .row{flex-wrap:wrap;gap:6px}
