@@ -1,13 +1,14 @@
 /* 화면 전환(render), 날짜 이동, 버튼 연결, 시작(render 호출) */
 // 현재 view에 맞는 화면을 그린다. 데이터를 바꾼 뒤 부르는 새로고침 함수
 function render(){applyTheme();applyRecurring();applyRepeats();
- $("vd").className=view==="day"?"on":"";$("vw").className=view==="week"?"on":"";$("vm").className=view==="month"?"on":"";$("vy").className=view==="money"?"on":"";
+ $("vd").className=view==="day"?"on":"";$("vw").className=view==="week"?"on":"";$("vm").className=view==="month"?"on":"";$("vy").className=view==="money"?"on":"";$("vs").className=view==="set"?"vs on":"vs";$("setP").hidden=view!=="set";
  $("dayL").hidden=$("dayG").hidden=view!=="day";$("moneyS").hidden=view!=="money";$("tagbar").hidden=view==="money";
  if(view==="day")$("title").textContent=cur.getFullYear()+"년 "+(cur.getMonth()+1)+"월 "+cur.getDate()+"일 ("+DN[cur.getDay()]+")";
  else if(view==="week"){var a=weekStart(),b=new Date(a);b.setDate(a.getDate()+6);$("title").textContent=(a.getMonth()+1)+"월 "+a.getDate()+"일 – "+(b.getMonth()+1)+"월 "+b.getDate()+"일"}
+ else if(view==="set")$("title").textContent="설정";
  else $("title").textContent=cur.getFullYear()+"년 "+(cur.getMonth()+1)+"월"+(view==="money"&&mSub==="day"?" "+cur.getDate()+"일 ("+DN[cur.getDay()]+")":"");
  renderTags();
- if(view==="day"){renderDay();renderDayMoney();renderBanner();renderMiniCal()}else if(view==="week"){renderWeek();renderBanner();renderWeekPick()}else if(view==="money"){renderMoney();renderRecurring();renderBanner()}else{renderMonth();renderBanner();renderMonPick()}renderMemos();applyLayout()}
+ if(view==="day"){renderDay();renderDayMoney();renderBanner();renderMiniCal()}else if(view==="week"){renderWeek();renderBanner();renderWeekPick()}else if(view==="money"){renderMoney();renderRecurring();renderBanner()}else if(view==="set"){renderSet()}else{renderMonth();renderBanner();renderMonPick()}renderMemos();applyLayout()}
 
 // ◀ ▶ 이동: 일간은 하루, 주간은 7일, 월간은 한 달
 function move(n){

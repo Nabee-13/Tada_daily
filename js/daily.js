@@ -5,6 +5,8 @@ var dragT=null,gridPend=null;   // gridPend: 시간표에서 "시작 칸"만 눌
 function renderDay(){
  var T=dayT(cur).slice();   // 순서는 사용자가 정한 대로(allOf 배열 순서)
  var ul=$("list");ul.innerHTML="";
+ var dl=$("dayL"),oa=dl.querySelector(".dayan");if(oa)oa.remove();var an=annivOn(cur);   // 오늘의 기념일 (anniv.js)
+ if(an.length){var da=el("div","dayan");an.forEach(function(a){var p=annivPos(a,cur),c=el("span","achip",a.n+(p.n>1?" ("+p.i+"/"+p.n+"일째)":""));c.style.borderColor=c.style.color=a.color;da.appendChild(c)});dl.insertBefore(da,dl.firstChild)}
  // 태그(분류)마다 묶음 상자: 제목 칩 + "+"(그 태그로 바로 추가). 칸 위로 끌어다 놓으면 분류가 바뀐다
  var GR={},mkG=function(id,tg){var w=el("div","grp"),h=el("div","gh"),u=el("ul");
   if(tg){var gn=el("span","gn",tg.name);gn.style.color=tg.color;var pl=el("button","gp","+");pl.title=tg.name+"에 할 일 추가";pl.onclick=function(){openTask(null,{arr:allOf(cur),tag:tg.id})};h.append(gn,pl)}else h.appendChild(el("span","gn","태그 없음"));
@@ -36,6 +38,7 @@ function renderDay(){
   dragSort(li,r,t,allOf(cur));   /* 순서 바꾸기 (grouplist.js) */
   });
  if(!GR[""].children.length)w0.remove();   // 태그 없는 할 일이 없으면 그 묶음은 감춘다
+ Object.keys(GR).forEach(function(id){if(!GR[id].children.length)GR[id].parentNode.classList.add("emp")});   // 할 일이 없는 태그 묶음은 숨긴다 (끌 때만 보임)
  var g=$("grid");g.innerHTML="";g.appendChild(el("div"));var A=paint(T.concat(spillT(cur)));
  for(var m=0;m<6;m++)g.appendChild(el("div","hd",m*10+"분"));
  for(var hr=H0;hr<H1;hr++){g.appendChild(el("div","hr"+(hr>=24?" nx":""),(hr%24)+"시"));
@@ -65,6 +68,13 @@ function openTask(t,o){o=o||{};var R=o.rule?t:null,isNew=!t,ov=$("ov");ov.hidden
  var nt=el("button","sm","+ 태그");   // 태그를 새로 만들고 돌아오면 입력하던 글자와 새 태그가 그대로 채워진다
  nt.onclick=function(){var tu=!o.noTime&&ut.checked,sv={n:nm.value,memo:mm.value,tag:tg.value,s:tu?toM(s.value):null,e:tu?toM(e.value):null};openModal(null,undefined,function(){openTask(t,{arr:o.arr,noTime:o.noTime,rule:o.rule,n:sv.n,memo:sv.memo,s:sv.s,e:sv.e,tag:db.tags.length>cnt?db.tags[db.tags.length-1].id:sv.tag})})};
  tr0.append(tg,nt);card.append(el("b",null,R?"반복 일정 수정":isNew?"할 일 추가":"할 일 수정"),nm,mm,tr0);
+ // 날짜 칸: 바꾸고 저장하면 그 날로 옮겨진다 (복사 체크 시 원래 날은 그대로). 반복 규칙·주간/월간 체크리스트에는 없다
+ var dtI=null,cpI=null;
+ if(!R&&!o.noTime&&(isNew?o.arr===allOf(cur):allOf(cur).indexOf(t)>=0)){var dtW=el("div","datew");dtI=el("input");dtI.type="date";dtI.value=key(cur);
+  var dq=el("div","row");[["오늘",0],["내일",1],["모레",2],["다음 주",7]].forEach(function(q){var bb=el("button","sm",q[0]);bb.onclick=function(){dtI.value=addDays(key(cur),q[1])};dq.appendChild(bb)});
+  dtW.append(el("span","sub",isNew?"날짜":"날짜 (바꾸고 저장하면 그 날로 옮겨져요)"),dtI,dq);
+  if(!isNew){var cl=el("label","opt");cpI=el("input");cpI.type="checkbox";cl.append(cpI,document.createTextNode("옮기지 않고 복사 (원래 날 일정은 그대로)"));dtW.appendChild(cl)}
+  card.appendChild(dtW)}
  var ut=el("input"),s=el("input"),e=el("input"),tm=el("div","row2");
  if(!o.noTime){ut.type="checkbox";ut.checked=(!isNew&&t.s!=null)||o.s!=null;var lb=el("label","opt");lb.append(ut,document.createTextNode("시간 지정 (선택)"));
   s.type=e.type="time";s.step=e.step=60;s.value=hm(t&&t.s!=null?t.s:(o.s!=null?o.s:540));e.value=hm(t&&t.e!=null?t.e:(o.e!=null?o.e:600));var fl=el("label","opt"),fi=el("input");fi.type="checkbox";fi.checked=!!(t&&t.fill);fl.append(fi,document.createTextNode("체크 안 해도 시간표에 칠하기 (수업·고정 일정)"));
@@ -81,7 +91,6 @@ function openTask(t,o){o=o||{};var R=o.rule?t:null,isNew=!t,ov=$("ov");ov.hidden
    for(var dd=1;dd<=31;dd++){var q=el("option",null,"매월 "+dd+"일");q.value=dd;dm.appendChild(q)}dm.value=R?R.dom:cur.getDate();
    var shw=function(){wr.hidden=rp.value!=="weekly";dm.hidden=rp.value!=="monthly";dl.hidden=dr.hidden=!rp.value};rp.onchange=shw;shw();
    card.append(el("b",null,"반복"),rp,wr,dm,dl,dr)}}
- if(t&&!R&&!o.noTime&&allOf(cur).indexOf(t)>=0)card.appendChild(moveBox(t));   /* 다른 날로 옮기기·복사 (move.js) */
  var b=el("div","btns"),cc=el("button",null,"취소"),ok=el("button",null,"저장");cc.onclick=function(){ov.hidden=true};ok.style.background="var(--ac)";ok.style.color="#fff";
  ok.onclick=function(){var n=nm.value.trim();if(!n){nm.focus();return}var data={n:n,memo:mm.value.trim(),tag:tg.value},rk=rp?rp.value:"";
   if(!o.noTime){var ns=null,ne=null,gp=[];
@@ -96,7 +105,10 @@ function openTask(t,o){o=o||{};var R=o.rule?t:null,isNew=!t,ov=$("ov");ov.hidden
    rule.kind=rk;rule.wd=st.wd.slice().sort();rule.dom=+dm.value;rule.from=fr.value||key(cur);rule.to=to.value||"";
    if(R)dropFuture(rule);else db.repeats.push(rule);
    save();ov.hidden=true;render();return}
-  if(isNew){data.id=Math.random().toString(36).slice(2);data.d=false;o.arr.push(data)}else Object.keys(data).forEach(function(k){t[k]=data[k]});
+  var tk=(dtI&&dtI.value)||key(cur),dayArr=function(k){return db.days[k]||(db.days[k]=[])};
+  if(isNew){data.id=Math.random().toString(36).slice(2);data.d=false;(tk===key(cur)?o.arr:dayArr(tk)).push(data)}
+  else if(cpI&&cpI.checked){var c0=JSON.parse(JSON.stringify(t));Object.keys(data).forEach(function(k){c0[k]=data[k]});c0.id=Math.random().toString(36).slice(2);c0.d=false;delete c0.rid;dayArr(tk).push(c0)}   /* 복사 */
+  else{Object.keys(data).forEach(function(k){t[k]=data[k]});if(tk!==key(cur))sendTask(t,tk,false)}   /* 날짜가 바뀌었으면 옮기기 (move.js) */
   save();ov.hidden=true;render()};
  if(R){var del=el("button","del","삭제");del.onclick=function(){ask("'"+R.n+"' 반복 일정을 삭제할까요? 오늘부터 아직 안 한 반복 할 일은 사라지고, 지난 기록은 남아요.",function(){dropFuture(R);db.repeats=db.repeats.filter(function(q){return q!==R});save();ov.hidden=true;render()})};b.appendChild(del)}
  else if(t&&t.rid){var rb=el("button","sm","반복 설정");rb.onclick=function(){var rr=db.repeats.find(function(q){return q.id===t.rid});if(rr)openTask(rr,{rule:true});else tell("반복 규칙이 삭제된 일정이에요.")};b.appendChild(rb)}

@@ -193,3 +193,15 @@ li{border:0;background:var(--cell);border-radius:14px;padding:10px 12px}
 /* ---- 기념일 (달력 칸) ---- */
 .md .an{font-size:11px;font-weight:700;line-height:1.15;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:block}
 #dayL .row{flex-wrap:wrap;gap:6px}
+
+/* ---- 설정 탭 / 기념일 / 빈 태그 숨김 ---- */
+.grp.emp{display:none}.dragmode .grp.emp{display:block;opacity:.55}
+.md .an.rg{border-radius:4px;padding:0 3px}
+.adot{display:inline-block;width:6px;height:6px;border-radius:50%;margin-left:3px;vertical-align:middle}
+.dayan{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.achip{border:1.5px solid;border-radius:999px;padding:3px 11px;font-size:13px;font-weight:700}
+.arow{display:flex;align-items:center;gap:8px;width:100%;text-align:left;background:var(--cell);border-radius:12px;padding:10px 12px}
+.arow i{width:10px;height:10px;border-radius:50%;flex:none}.arow .an1{font-weight:700}.arow .sub{flex:1;min-width:0}.arow .dd{font-weight:700;color:var(--ac);white-space:nowrap}
+.datew{display:grid;gap:8px}.annbtn{margin-bottom:8px}
+#setP .syncbox{margin-bottom:18px}
+.mo{grid-template-columns:repeat(7,minmax(0,1fr))!important}.md{min-width:0}

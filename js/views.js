@@ -16,6 +16,7 @@ function renderWeek(){
  w.appendChild(el("div"));
  for(var i=0;i<7;i++){var d=new Date(ws);d.setDate(ws.getDate()+i);days.push(d);
   var h=el("div","hd d"+(key(d)===td?" tdy":""),DN[i]+" "+d.getDate());
+  annivOn(d).forEach(function(a){var ad=el("i","adot");ad.style.background=a.color;ad.title=a.n;h.appendChild(ad)});   /* 기념일 점 */
   (function(d){h.onclick=function(){cur=d;view="day";render()}})(d);w.appendChild(h);addMin(dayT(d),tot)}var PS=days.map(function(d){return paint(dayT(d).concat(spillT(d)))});
  for(var hr=H0;hr<H1;hr++){w.appendChild(el("div","hr"+(hr>=24?" nx":""),(hr%24)+"시"));
   days.forEach(function(d,di){var A=PS[di],hc=el("div","hc");
@@ -32,11 +33,11 @@ function calCell(cd,onPick,tot){var dt=cd.dt,k=key(dt),box=el("div","md"+(cd.out
   if(T.length&&db.showCnt)box.appendChild(el("span",dn.length===T.length?"all":null,dn.length+"/"+T.length));
   var ks=Object.keys(dm);if(ks.length){var sum=ks.reduce(function(a,k2){return a+dm[k2]},0),bar=el("div","bar");
    ks.forEach(function(k2){var s=el("span");s.style.background=tagOf(k2).color;s.style.flex=dm[k2]/Math.max(sum,1);bar.appendChild(s)});box.appendChild(bar)}}
- if(!cd.out){annivOn(dt).forEach(function(a){var s=el("span","an",a.n);s.style.color=a.color;s.title=a.n;box.appendChild(s)})}   /* 기념일 (anniv.js) */
+ if(!cd.out){annivOn(dt).forEach(function(a){var p=annivPos(a,dt),s=el("span","an"+(p.n>1?" rg":""),a.n);s.style.color=a.color;if(p.n>1)s.style.background=a.color+"26";s.title=a.n+(p.n>1?" ("+p.i+"/"+p.n+"일째)":"");box.appendChild(s)})}   /* 기념일 (anniv.js) */
  box.onclick=function(){onPick(dt)};return box}
 
 // 월간 화면: 달력과 월 통계. 칸을 누르면 그 날의 일간 화면으로 이동
-function renderMonth(){var m=$("mo");m.innerHTML="";var y=cur.getFullYear(),mo=cur.getMonth(),tot={},mk=y+"-"+(mo+1);
+function renderMonth(){var m=$("mo");m.innerHTML="";var mb=$("moG"),ob=mb.querySelector(".annbtn");if(ob)ob.remove();var ab=el("button","sm annbtn","+ 기념일");ab.onclick=function(){openAnniv(null)};mb.insertBefore(ab,mb.firstChild);var y=cur.getFullYear(),mo=cur.getMonth(),tot={},mk=y+"-"+(mo+1);
  renderCL($("moCL"),db.months[mk]||(db.months[mk]=[]),"월간 체크리스트");
  DN.forEach(function(n){m.appendChild(el("div","hd",n))});
  calDays(y,mo).forEach(function(cd){m.appendChild(calCell(cd,function(dt){cur=dt;view="day";render()},tot))});
