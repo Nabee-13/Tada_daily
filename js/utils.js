@@ -16,19 +16,19 @@ function dayT(d){return(db.days[key(d)]||[]).filter(function(t){return filt==="a
 // 태그 id → 태그 객체 (없으면 "태그 없음" 기본값)
 function tagOf(id){return db.tags.filter(function(t){return t.id===id})[0]||{id:"",name:"태그 없음",color:"#6e7781"}}
 // 완료됐거나 "체크 안 해도 칠하기"를 켠 시간 할 일을 1분 단위 색칠 정보(겹치면 층별로)로 바꾼다
-function paint(T){var L=[];T.forEach(function(t){if(t.s==null||(!t.d&&!t.fill))return;var a=new Array(1440).fill(false);for(var m=Math.max(t.s,H0*60);m<Math.min(t.e,H1*60);m++)a[m-H0*60]=!t.gaps.some(function(q){return m>=q.s&&m<q.e});L.push({col:t.color||tagOf(t.tag).color,a:a})});return L}
+function paint(T){var L=[];T.forEach(function(t){if(t.s==null||(!t.d&&!t.fill))return;var a=new Array(1440).fill(false);for(var m=Math.max(t.s,H0*60);m<Math.min(t.e,H1*60);m++)a[m-H0*60]=!t.gaps.some(function(q){return m>=q.s&&m<q.e});L.push({col:t.color||tagOf(t.tag).color,tag:t.tag,a:a})});return L}
 // 전날에서 이어진 시간: 어제 시작해 오늘 시작 시각을 넘어 끝나는 할 일을, 오늘 시간표 좌표로 옮긴 사본으로 돌려준다 (시간표 색칠에만 쓴다)
 function spillT(d){var p=new Date(d.getFullYear(),d.getMonth(),d.getDate()-1),E=H1*60;return(db.days[key(p)]||[]).filter(function(t){return t.s!=null&&t.e>E&&(filt==="all"||t.tag===filt)}).map(function(t){return Object.assign({},t,{s:Math.max(t.s,E)-1440,e:t.e-1440,gaps:(t.gaps||[]).map(function(q){return{s:q.s-1440,e:q.e-1440}})})})}
 // 10분 칸 하나의 CSS 배경(반투명 색 층들)을 만든다. 5분이면 칸의 절반만 칠해진다
 function bg(L,a){var i=a-H0*60,out=[];L.forEach(function(l){var st=[],p=0,any=false;while(p<10){var c=l.a[i+p],j=p;while(j<10&&l.a[i+j]===c)j++;st.push((c?l.col+"80":"transparent")+" "+p*10+"% "+j*10+"%");if(c)any=true;p=j}if(any)out.push("linear-gradient(to right,"+st.join(",")+")")});return out.join(",")}
-// 완료된 할 일의 태그별 시간(분)을 tot에 누적한다 (빈 시간 제외)
-function addMin(T,tot){T.forEach(function(t){if(!t.d||t.s==null)return;var d=t.e-t.s;t.gaps.forEach(function(q){d-=Math.max(0,Math.min(q.e,t.e)-Math.max(q.s,t.s))});tot[t.tag]=(tot[t.tag]||0)+d})}
+// 시간표 기준 통계: 그 날 시간표에 칠해진 분(전날에서 이어진 시간 포함, 하루 경계로 나뉨)을 태그별로 tot에 더한다
+function addDayMin(d,tot){paint(dayT(d).concat(spillT(d))).forEach(function(l){var n=0;l.a.forEach(function(v){if(v)n++});if(n)tot[l.tag]=(tot[l.tag]||0)+n})}
 var $=function(i){return document.getElementById(i)};
 // DOM 요소 만들기 도우미: el(태그, 클래스, 글자)
 function el(tag,cls,txt){var e=document.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=txt;return e}
 // 태그별 시간 배분을 도넛 그래프 + 막대로 그린다
 function showStats(box,tot){box.innerHTML="";var ks=Object.keys(tot).sort(function(a,b){return tot[b]-tot[a]}),sum=ks.reduce(function(a,k){return a+tot[k]},0);
- if(!sum){box.appendChild(el("span","sub","아직 완료한 시간이 없어요."));return}
+ if(!sum){box.appendChild(el("span","sub","아직 시간표에 칠해진 시간이 없어요."));return}
  var acc=0,stops=[],dr=el("div","dr");
  ks.forEach(function(k){var tg=tagOf(k),m=tot[k],a=acc/sum*100;acc+=m;stops.push(tg.color+" "+a+"% "+acc/sum*100+"%");
   var d=el("div"),i=el("i");i.style.background=tg.color;d.append(i,el("span","n",tg.name),el("span",null,Math.floor(m/60)+"시간 "+m%60+"분"),el("span","p",Math.round(m/sum*100)+"%"));

@@ -205,3 +205,6 @@ li{border:0;background:var(--cell);border-radius:14px;padding:10px 12px}
 .datew{display:grid;gap:8px}.annbtn{margin-bottom:8px}
 #setP .syncbox{margin-bottom:18px}
 .mo{grid-template-columns:repeat(7,minmax(0,1fr))!important}.md{min-width:0}
+
+/* ---- 할 일 추가 팝업 단순화 ---- */
+.more{display:grid;gap:8px}.more>summary{cursor:pointer;color:var(--sub);padding:4px 0;font-size:14px}.more>*:not(summary){margin-top:2px}

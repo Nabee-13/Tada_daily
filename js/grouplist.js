@@ -14,7 +14,8 @@ function dragSort(li,r,t,arr){var gr=el("span","grab","⠿");li.dataset.tid=t.id
  at=function(ev){var q=document.elementFromPoint(ev.clientX,ev.clientY);return q&&q.closest("li[data-tid],.grp")};
  gr.onpointerdown=function(e){e.preventDefault();document.body.classList.add("dragmode");gr.setPointerCapture(e.pointerId);li.classList.add("dragging");
   gr.onpointermove=function(ev){clr();var q=at(ev);if(q&&q!==li)q.classList.add("dropt")};
-  gr.onpointerup=function(ev){document.body.classList.remove("dragmode");gr.onpointermove=gr.onpointerup=null;clr();li.classList.remove("dragging");var q=at(ev);if(!q||q===li)return;
+  gr.onpointerup=function(ev){var q=at(ev);   /* 놓은 자리는 빈 태그 칸을 감추기 전에 먼저 알아낸다 */
+  document.body.classList.remove("dragmode");gr.onpointermove=gr.onpointerup=null;clr();li.classList.remove("dragging");if(!q||q===li)return;
    var f=arr.findIndex(function(z){return z.id===t.id}),it=arr.splice(f,1)[0];
    if(q.dataset.tid){var tt=arr.find(function(z){return z.id===q.dataset.tid});if(!tt){arr.splice(f,0,it);return}it.tag=tt.tag;arr.splice(arr.indexOf(tt),0,it)}
    else{it.tag=q.dataset.gid;arr.push(it)}

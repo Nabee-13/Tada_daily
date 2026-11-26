@@ -17,7 +17,7 @@ function renderWeek(){
  for(var i=0;i<7;i++){var d=new Date(ws);d.setDate(ws.getDate()+i);days.push(d);
   var h=el("div","hd d"+(key(d)===td?" tdy":""),DN[i]+" "+d.getDate());
   annivOn(d).forEach(function(a){var ad=el("i","adot");ad.style.background=a.color;ad.title=a.n;h.appendChild(ad)});   /* 기념일 점 */
-  (function(d){h.onclick=function(){cur=d;view="day";render()}})(d);w.appendChild(h);addMin(dayT(d),tot)}var PS=days.map(function(d){return paint(dayT(d).concat(spillT(d)))});
+  (function(d){h.onclick=function(){cur=d;view="day";render()}})(d);w.appendChild(h);addDayMin(d,tot)}var PS=days.map(function(d){return paint(dayT(d).concat(spillT(d)))});
  for(var hr=H0;hr<H1;hr++){w.appendChild(el("div","hr"+(hr>=24?" nx":""),(hr%24)+"시"));
   days.forEach(function(d,di){var A=PS[di],hc=el("div","hc");
    for(var c=0;c<6;c++){var a=hr*60+c*10,s=el("b");s.style.backgroundImage=bg(A,a);hc.appendChild(s)}
@@ -28,7 +28,7 @@ function renderWeek(){
 // 앞뒤 달(cd.out) 칸은 어둡게 날짜만. tot를 주면 이 달 시간 통계에 더한다
 function calCell(cd,onPick,tot){var dt=cd.dt,k=key(dt),box=el("div","md"+(cd.out?" out":"")+(k===key(cur)?" sel":"")+(k===key(new Date())?" tdy":""));
  box.appendChild(el("span","n",String(dt.getDate())));
- if(!cd.out){var T=dayT(dt),dm={},dn=T.filter(function(t){return t.d});addMin(T,dm);if(tot)addMin(T,tot);
+ if(!cd.out){var T=dayT(dt),dm={},dn=T.filter(function(t){return t.d});addDayMin(dt,dm);if(tot)addDayMin(dt,tot);
   if(dn.length){var dots=el("div","dots");dn.slice(0,6).forEach(function(t){var i=el("i");i.style.background=t.color||tagOf(t.tag).color;dots.appendChild(i)});box.appendChild(dots)}
   if(T.length&&db.showCnt)box.appendChild(el("span",dn.length===T.length?"all":null,dn.length+"/"+T.length));
   var ks=Object.keys(dm);if(ks.length){var sum=ks.reduce(function(a,k2){return a+dm[k2]},0),bar=el("div","bar");
