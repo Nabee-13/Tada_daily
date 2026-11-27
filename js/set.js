@@ -1,5 +1,5 @@
 /* 설정 탭: 기념일, 태그 관리, 그 밖의 설정(꾸미기·동기화·프리셋·내보내기는 기존 설정 창) */
-function renderSet(){var b=$("setP");b.innerHTML="";b.append(annivBox(),tagBox(),prefBox())}
+function renderSet(){var b=$("setP");b.innerHTML="";b.append(tagBox(),prefBox())}
 // 태그: 눌러서 수정, ‹ › 로 순서 바꾸기, + 추가
 function tagBox(){var w=el("div","syncbox"),tg=el("div","row");w.appendChild(el("b",null,"태그 (눌러서 편집)"));
  db.tags.forEach(function(q,i){var s=el("span","row"),c=el("button","chip"),d=el("i");d.style.background=q.color;c.append(d,document.createTextNode(q.name));c.onclick=function(){openModal(q,undefined,render)};

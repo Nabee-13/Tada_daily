@@ -9,9 +9,9 @@ function applyRepeats(){var ch=false;
  calDays(cur.getFullYear(),cur.getMonth()).forEach(function(cd){var k=key(cd.dt),dow=cd.dt.getDay(),ld=new Date(cd.dt.getFullYear(),cd.dt.getMonth()+1,0).getDate();
   db.repeats.forEach(function(r){if(k<r.from||(r.to&&k>r.to)||(r.skip||[]).indexOf(k)>=0)return;
    var ok=r.kind==="daily"||(r.kind==="weekly"&&r.wd.indexOf(dow)>=0)||(r.kind==="monthly"&&cd.dt.getDate()===Math.min(r.dom,ld));if(!ok)return;
-   var arr=db.days[k];if(arr&&arr.some(function(t){return t.rid===r.id}))return;
-   (db.days[k]=arr||[]).push({id:Math.random().toString(36).slice(2),n:r.n,memo:r.memo,tag:r.tag,s:r.s,e:r.e,gaps:[],color:r.color,fill:r.fill,d:false,rid:r.id});ch=true})});
+   var mp=r.nl?db.tb:db.days,arr=mp[k];if(arr&&arr.some(function(t){return t.rid===r.id}))return;   // nl: 시간표만 칠하는 규칙
+   (mp[k]=arr||[]).push({id:Math.random().toString(36).slice(2),n:r.n,memo:r.memo,tag:r.tag,s:r.s,e:r.e,gaps:[],color:r.color,fill:r.nl?true:r.fill,d:!!r.nl,rid:r.id});ch=true})});
  if(ch)save(true)}
 
 // 규칙을 고치거나 지울 때: 오늘부터의 아직 안 한 반복 할 일을 지운다 (새 규칙으로 다시 만들어지거나 그대로 사라진다. 지난 기록과 완료한 일은 남는다)
-function dropFuture(r){var tk=key(new Date());Object.keys(db.days).forEach(function(k){if(k>=tk)db.days[k]=db.days[k].filter(function(t){return !(t.rid===r.id&&!t.d)})})}
+function dropFuture(r){var tk=key(new Date());Object.keys(db.days).forEach(function(k){if(k>=tk)db.days[k]=db.days[k].filter(function(t){return !(t.rid===r.id&&!t.d)})});Object.keys(db.tb).forEach(function(k){if(k>=tk)db.tb[k]=db.tb[k].filter(function(t){return t.rid!==r.id})})}

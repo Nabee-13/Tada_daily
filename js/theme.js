@@ -35,7 +35,7 @@ if(db.banner){["day","week","month","money"].forEach(function(v){if(!db.banners[
 function banner(){var B=db.banners[view];if(!B)return null;Object.keys(BAN_DEF).forEach(function(k){if(B[k]==null)B[k]=BAN_DEF[k]});return B}
 
 // 현재 탭의 색을 화면에 적용 (CSS 변수 --bg --card --tx --ac 를 바꾼다). render()가 시작할 때마다 불린다
-function applyTheme(){var r=document.documentElement.style,t=themeOf(db.theme,view==="set"?"day":view);
+function applyTheme(){var r=document.documentElement.style,t=themeOf(db.theme,(view==="set"||view==="ann")?"day":view);
  [["bg","--bg"],["card","--card"],["tx","--tx"],["ac","--ac"]].forEach(function(p){if(t[p[0]])r.setProperty(p[1],t[p[0]]);else r.removeProperty(p[1])});
  if(t.bg||t.card||t.tx){r.setProperty("--cell","color-mix(in srgb,var(--tx) 8%,var(--card))");r.setProperty("--line","color-mix(in srgb,var(--tx) 18%,var(--card))");r.setProperty("--sub","color-mix(in srgb,var(--tx) 55%,var(--card))")}
  else["--cell","--line","--sub"].forEach(function(k){r.removeProperty(k)})}

@@ -1,11 +1,12 @@
-/* 하루 시작 시각 바꾸기: 설정에서 고르면 H0/H1이 바뀌고, 이미 저장된 일정은 새 기준의 날짜로 옮겨진다.
+/* 하루 시작 시각 바꾸기: 설정에서 고르면 H0/H1이 바뀌고, 이미 저장된 일정(체크리스트 일정·시간표만 칠한 일정)은 새 기준의 날짜로 옮겨진다.
  * (기록 좌표: 그날 0시부터의 분. 시작 시각 이전은 +1440 = 다음 날 새벽) */
-function setDayStart(n){var N0=n*60,days=db.days,add=[],mv=function(o,sh){o.s-=sh*1440;o.e-=sh*1440},dk=function(k,sh){var p=k.split("-");return key(new Date(+p[0],+p[1]-1,+p[2]+sh))};
- Object.keys(days).forEach(function(k){var keep=[];days[k].forEach(function(t){
-  if(t.s==null){keep.push(t);return}
-  var sh=Math.floor((t.s-N0)/1440);if(sh===0){keep.push(t);return}
-  mv(t,sh);t.gaps=(t.gaps||[]).map(function(q){var o={s:q.s,e:q.e};mv(o,sh);return o});add.push([dk(k,sh),t])});days[k]=keep});
- add.forEach(function(a){(days[a[0]]=days[a[0]]||[]).push(a[1])});
+function setDayStart(n){var N0=n*60,mv=function(o,sh){o.s-=sh*1440;o.e-=sh*1440},dk=function(k,sh){var p=k.split("-");return key(new Date(+p[0],+p[1]-1,+p[2]+sh))};
+ [db.days,db.tb].forEach(function(days){var add=[];
+  Object.keys(days).forEach(function(k){var keep=[];days[k].forEach(function(t){
+   if(t.s==null){keep.push(t);return}
+   var sh=Math.floor((t.s-N0)/1440);if(sh===0){keep.push(t);return}
+   mv(t,sh);t.gaps=(t.gaps||[]).map(function(q){var o={s:q.s,e:q.e};mv(o,sh);return o});add.push([dk(k,sh),t])});days[k]=keep});
+  add.forEach(function(a){(days[a[0]]=days[a[0]]||[]).push(a[1])})});
  // 반복 규칙도 같은 기준으로 옮긴다 (요일/날짜/기간 포함)
  db.repeats.forEach(function(r){if(r.s==null)return;var sh=Math.floor((r.s-N0)/1440);if(sh===0)return;mv(r,sh);
   if(r.wd)r.wd=r.wd.map(function(d){return((d+sh)%7+7)%7});if(r.dom)r.dom=Math.min(31,Math.max(1,r.dom+sh));

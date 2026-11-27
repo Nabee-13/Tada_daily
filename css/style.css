@@ -208,3 +208,13 @@ li{border:0;background:var(--cell);border-radius:14px;padding:10px 12px}
 
 /* ---- 할 일 추가 팝업 단순화 ---- */
 .more{display:grid;gap:8px}.more>summary{cursor:pointer;color:var(--sub);padding:4px 0;font-size:14px}.more>*:not(summary){margin-top:2px}
+
+/* ---- 기념일 탭 / 시간표만 칠한 일정 ---- */
+.tbl{display:grid;gap:6px;margin-top:10px}.tbl .row{align-items:center;gap:8px}.tbl i{width:10px;height:10px;border-radius:3px;flex:none}.tbl .t{flex:1;min-width:0}
+.md .an.only{opacity:.75;font-style:italic}#anP .row{flex-wrap:wrap}
+@media(max-width:759px){.tabs button{padding:14px 2px!important;font-size:14.5px!important;flex:1;min-width:0}}
+
+/* ---- 기념일 탭 / 시간표만 칠한 일정 ---- */
+.tbl{display:grid;gap:6px;margin-top:10px}.tbl .row{align-items:center;gap:8px}.tbl i{width:10px;height:10px;border-radius:3px;flex:none}.tbl .t{flex:1;min-width:0}
+.md .an.only{opacity:.75;font-style:italic}#anP .row{flex-wrap:wrap}
+@media(max-width:759px){.tabs button{padding:14px 2px!important;font-size:14.5px!important;flex:1;min-width:0}}

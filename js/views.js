@@ -17,7 +17,7 @@ function renderWeek(){
  for(var i=0;i<7;i++){var d=new Date(ws);d.setDate(ws.getDate()+i);days.push(d);
   var h=el("div","hd d"+(key(d)===td?" tdy":""),DN[i]+" "+d.getDate());
   annivOn(d).forEach(function(a){var ad=el("i","adot");ad.style.background=a.color;ad.title=a.n;h.appendChild(ad)});   /* 기념일 점 */
-  (function(d){h.onclick=function(){cur=d;view="day";render()}})(d);w.appendChild(h);addDayMin(d,tot)}var PS=days.map(function(d){return paint(dayT(d).concat(spillT(d)))});
+  (function(d){h.onclick=function(){cur=d;view="day";render()}})(d);w.appendChild(h);addDayMin(d,tot)}var PS=days.map(function(d){return paint(paintT(d))});
  for(var hr=H0;hr<H1;hr++){w.appendChild(el("div","hr"+(hr>=24?" nx":""),(hr%24)+"시"));
   days.forEach(function(d,di){var A=PS[di],hc=el("div","hc");
    for(var c=0;c<6;c++){var a=hr*60+c*10,s=el("b");s.style.backgroundImage=bg(A,a);hc.appendChild(s)}
